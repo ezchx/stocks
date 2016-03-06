@@ -1,0 +1,122 @@
+.title {
+  text-align: center;
+  margin-top: 25px;
+  margin-bottom: 15px;
+  font-size: 50px;
+}
+
+.chart, .tickers {
+  text-align: center;
+}
+
+#m {
+  width: 100px;
+  padding-left: 5px;
+  margin-bottom: 10px;
+}
+
+#errorMsg {
+  color: #FF0000;
+  margin-top: 0px;
+  margin-bottom: 5px;
+}
+
+.timeSpan {
+  margin-top: 20px;
+  margin-bottom: 0px;
+}
+
+label {
+  padding-left: 5px;
+  padding-right: 20px;
+}
+
+.selButty {
+  margin-left: 10px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.delButty {
+  margin-right: 25px;
+  margin-bottom: 20px;
+}
+
+form {
+  padding-bottom: 0px;
+  margin-bottom: 0px;
+}
+
+  body {
+    text-align: center;
+  }
+
+  span {
+   font-family: arial;
+  }
+
+  svg {
+    //box-shadow: 2px 2px 2px #888888;
+    border: solid 0px #c0c0c0;
+    margin-top: 0px;
+
+  }
+
+
+  .bar {
+    fill: steelblue;
+  }
+
+  .bar:hover {
+    fill: #A5BDD9;
+  }
+
+  .axis {
+    font: 10px sans-serif;
+  }
+
+  .axis path,
+  .axis line {
+    fill: none;
+    stroke: #000;
+    stroke-width: 2px;
+    shape-rendering: crispEdges;
+  }
+
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 2px;
+}
+
+
+
+  .d3-tip {
+    line-height: 1;
+    font-weight: bold;
+    padding: 12px;
+    background: #A5BDD9;
+    color: #fff;
+    border-radius: 10px;
+  }
+
+  /* Creates a small triangle extender for the tooltip */
+  .d3-tip:after {
+    box-sizing: border-box;
+    display: inline;
+    font-size: 10px;
+    width: 100%;
+    line-height: 1;
+    color: #A5BDD9;
+    content: "\25BC";
+    position: absolute;
+    text-align: center;
+  }
+
+  /* Style northward tooltips differently */
+  .d3-tip.n:after {
+    margin: -1px 0 0 0;
+    top: 100%;
+    left: 0;
+  }

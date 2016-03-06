@@ -1,0 +1,118 @@
+<html>
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <script src="../node_modules/d3/d3.js"></script>   
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.6.7/d3-tip.js"></script>
+    <link rel="stylesheet" href="stocks.css">
+    <script src="stocks.js"></script>
+    <title>Stock Chart</title>
+  </head>
+
+  <body>
+    <div id="debug"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="title"><span id="activeTicker"></span> Stock Chart</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div id="charty" class="chart">
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 timeSpan">
+          <form>
+            <input class="timeSpace" type="radio" name="times" value="5days" onclick="timeChg(this)"><label>5 days</label>
+            <input type="radio" name="times" value="1month" onclick="timeChg(this)" checked><label>1 month</label>
+            <input type="radio" name="times" value="3months" onclick="timeChg(this)"><label>3 months</label>
+            <input type="radio" name="times" value="6months" onclick="timeChg(this)"><label>6 months</label>
+            <input type="radio" name="times" value="1year" onclick="timeChg(this)"><label>1 year</label>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 tickers">
+          <div id="errorMsg">&nbsp;</div>
+            <input id="m" placeholder="enter ticker...">
+            <button type="submit" id="addMe" class="btn-xsm btn-primary buttyAdd" onClick="addTicker()">Add</button><br>
+          <span id="tickums"></span>
+        </div>
+      </div>
+    </div>    
+
+
+    <script>
+
+      var host = location.origin.replace(/^http/, 'ws')
+      var ws = new WebSocket(host);
+
+      $("#m").keyup(function(event){
+        if(event.keyCode == 13){
+          $("#addMe").click();
+        }
+      });
+
+      function addTicker() {
+        var runTicker = $('#m').val();
+        $("#errorMsg").html("&nbsp;")
+        var url = "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.historicaldata%20where%20symbol%20in%20(%22" + runTicker + "%22)%20and%20startDate%3D%222016-03-03%22%20and%20endDate%3D%222016-03-03%22&format=json&diagnostics=true&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=";
+        $.getJSON(url, function(json) {
+          //$("#debug").html(json.query.count);
+          if (json.query.count === 1) {
+            ws.send(JSON.stringify([
+              runTicker,
+              'Add'
+            ]));
+          } else {
+            $("#errorMsg").html("Invalid Ticker")
+          }
+          $('#m').val('');
+          $('#m').empty();
+          return false;
+        });
+      };
+
+
+      function deleteTicker(ticky){
+        //$("#debug").html(ticky);
+        ws.send(JSON.stringify([
+          ticky,
+          'Delete'
+        ]));
+        return false;
+      };
+
+      ws.onmessage = function(msg){
+        updatedArr = JSON.parse(msg.data);
+        var html = "";
+        for (var i = 0; i < updatedArr.length; i++) {
+          //$('#messages').append($('<li>').text(updatedArr[i].symbol));
+          html += '          <span>' + updatedArr[i].symbol + '</span><button type="button" name="'+ updatedArr[i].symbol + '" class="btn-xsm btn-success selButty" onclick="tickerChg(this)">Select</button><button type="button" id="'+ updatedArr[i].symbol + '" class="btn-xsm btn-danger delButty" onClick="deleteTicker(this.id)">Delete</button>';
+        }
+        $('#tickums').html(html);
+      };
+
+
+      $("#activeTicker").html("GOOG");
+      runChart();
+
+    </script>
+
+  </body>
+
+</html>
